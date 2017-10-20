@@ -1,7 +1,6 @@
 /**
  * By Adrian Cuellar And Jason
  */
-
 import java.io.*;
 import java.net.Socket;
 public final class Ipv4Client {
@@ -25,9 +24,16 @@ public final class Ipv4Client {
                 sequence[6]=0x20;
                 sequence[7]=0x32;
                 sequence[8]=0x06;
-
-                byte[] checkSumBytes;
-
+                // Copies all of the bytes in the packet except for the checksum to calculate the checksum.
+                byte[] checkSumBytes=new byte[sequence.length-2];
+                for(int i=0;i<sequence.length-2;i++){
+                        if(i<10){
+                            checkSumBytes[i]=sequence[i];
+                        }
+                        else{
+                            checkSumBytes[i]=sequence[i+2];
+                        }
+                }
                 int cSum = checksum(checkSumBytes);
                 String hex = Integer.toHexString(cSum);
                 if (hex.length() > 4)
@@ -36,10 +42,8 @@ public final class Ipv4Client {
                     while (hex.length() < 4)
                         hex = "0" + hex;
                 }
-                sequence = new byte[2];
-                sequence[0] = (byte) Integer.parseInt(hex.substring(0, 2).toUpperCase(), 16);
-                sequence[1] = (byte) Integer.parseInt(hex.substring(2).toUpperCase(), 16);
-
+                sequence[10] = (byte) Integer.parseInt(hex.substring(0, 2).toUpperCase(), 16);
+                sequence[11] = (byte) Integer.parseInt(hex.substring(2).toUpperCase(), 16);
                 out.write(sequence);
                 System.out.println(is.read());
             }

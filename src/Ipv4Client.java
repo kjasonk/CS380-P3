@@ -19,11 +19,27 @@ public final class Ipv4Client {
                 sequence[0] = 0x45;
                 sequence[1]=0x00;
 
+                //TO DO. TOTAL LENGTH in sequence[2] and sequence[3]
+
                 sequence[4]=0;
                 sequence[5]=0;
+                //Flag assuming no fragmentation
                 sequence[6]=0x20;
-                sequence[7]=0x32;
-                sequence[8]=0x06;
+                sequence[7]=0;
+                sequence[8]=0x32;
+                sequence[9]=0x06;
+                // source ip address
+                sequence[12]=0x11;
+                sequence[13]=0x11;
+                sequence[14]=0x11;
+                sequence[15]=0x11;
+                //server ip address
+                sequence[16]=0x12;
+                sequence[17]=(byte) 0xDD;
+                sequence[18]=(byte) 0x66;
+                sequence[19]= (byte) 0xB6;
+                //Rest is DATA, assuming it will be default byte value 0.
+
                 // Copies all of the bytes in the packet except for the checksum to calculate the checksum.
                 byte[] checkSumBytes=new byte[sequence.length-2];
                 for(int i=0;i<sequence.length-2;i++){

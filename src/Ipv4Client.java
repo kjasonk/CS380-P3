@@ -14,7 +14,7 @@ public final class Ipv4Client {
             PrintStream out = new PrintStream((socket.getOutputStream()),true,"UTF-8");
             
             for(int packetN=0; packetN<12; packetN++) {
-                System.out.println("Packet " + packetN);
+                System.out.println("Packet " + (packetN+1));
                 // .5B + .5B + 1B+ 2B + 2B + 3/8B + 1 5/8 B + 1B + 1B + 2B + 4B + 4B + DATA
                 byte[] sequence = new byte[20+(int) Math.pow(2,(packetN+1))];
                 //Version + HLen
@@ -55,9 +55,9 @@ public final class Ipv4Client {
                 sequence[19] = (byte) 0xB6;
                 //Rest is DATA, assuming it will be default byte value 0.
 
-                // Copies all of the bytes in the packet except for the checksum to calculate the checksum.
-                byte[] checkSumBytes=new byte[sequence.length-2];
-                for(int i=0;i<sequence.length-2;i++){
+                // Copies all of the bytes in the packet except for the checksum and data to calculate the checksum.
+                byte[] checkSumBytes=new byte[18];
+                for(int i=0;i<18;i++){
                         if(i<10){
                             checkSumBytes[i]=sequence[i];
                         }
